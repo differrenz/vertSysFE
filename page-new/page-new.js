@@ -5,9 +5,7 @@ import Page from "../page.js";
 export default class PageNew extends Page {
     constructor(app) {
         super(app, "page-new/page-new.html");
-
         this._formData = new FormData();
-
 
         this._newProfile = {
             accountId: localStorage.getItem("globalID"),
@@ -31,9 +29,6 @@ export default class PageNew extends Page {
 
             this._saveAndExit()
         });
-
-
-
     }
 
     async _saveAndExit() {
@@ -41,9 +36,9 @@ export default class PageNew extends Page {
         this._newProfile.firstName = this._mainElement.querySelector("input.newFirstName").value;
         this._newProfile.email = this._mainElement.querySelector("input.newEmail").value;
 
-        if (this._newProfile.email == null || this._newProfile.firstName == null || this._newProfile.lastName == null) {
-            let answer = confirm("Ein Eingabefeld ist noch leer. Fülle es und speichere dein Profil.");
-            if (!answer) return;
+        if (this._newProfile.email === "" || this._newProfile.firstName === "" || this._newProfile.lastName === "") {
+            confirm("Ein Eingabefeld ist noch leer. Fülle es und speichere dein Profil.");
+            return;
         }
 
         await this.uploadNewProfile()
