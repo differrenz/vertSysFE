@@ -41,23 +41,21 @@ export default class PageLogin extends Page {
     }
 
     async validateLogin() {
-
-        if (localStorage.getItem("globalID")
-            !== 0 && localStorage.getItem("globalID")
-            !== null) {
-            confirm("Sie sind bereits eingeloggt. Loggen sie sich vorher aus, bevor sie sich bei einem neuen Account einloggen.")
-            return;
-        }
+        console.log(localStorage.getItem("globalID"))
 
         this._userName = this._mainElement.querySelector("input.userName").value;
+        console.log(this._mainElement.querySelector("input.userName").value)
         this._password = this._mainElement.querySelector("input.password").value;
 
         this._newAccount.userName = this._userName
         this._newAccount.password = this._password
 
-        if (this._newAccount.userName == null || this._newAccount.password == null) {
-            let answer = confirm("Mindestens ein Eingabefeld ist noch leer.");
-            if (!answer) return;
+        console.log(this._userName)
+        console.log(this._password)
+
+        if (this._newAccount.userName === "" || this._newAccount.password === "") {
+            confirm("Mindestens ein Eingabefeld ist noch leer.");
+            return;
         }
 
         try {
@@ -68,7 +66,7 @@ export default class PageLogin extends Page {
                     body: JSON.stringify(this._newAccount)
                 });
 
-            if (response.status === 200) {
+            if (response.status !== 0) {
                 this._response = await response.json();
                 await this.setGlobalId()
                 location.hash = "#/";
@@ -136,6 +134,7 @@ export default class PageLogin extends Page {
 
     logout() {
         localStorage.setItem("globalID", null);
+        console.log(localStorage.getItem("globalID"))
         confirm("Sie sind nun ausgeloggt.");
     }
 };
