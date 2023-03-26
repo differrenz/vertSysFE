@@ -46,7 +46,9 @@ export default class PageList extends Page {
 
             // Event Handler registrieren
             liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit/${dataset.id}`);
-            liElement.querySelector(".action.delete").addEventListener("click", () => {this._askDelete(dataset.accountId)});
+            liElement.querySelector(".action.delete").addEventListener("click", () => {
+                this._askDelete(dataset.accountId)
+            });
         }
     }
 
@@ -58,14 +60,16 @@ export default class PageList extends Page {
 
 
     async _askDelete(accountId) {
-        let answer = confirm("Soll die ausgewählte Adresse wirklich gelöscht werden?");
+        let answer = confirm("Soll der ausgewählte Account wirklich gelöscht werden?");
         if (!answer) return;
+
+        console.log(localStorage.getItem("globalID"))
 
         try {
             await fetch(
                 `http://localhost:8081/account/deleteEverythingByAccountID/${accountId}`,
                 {
-                    method:`DELETE`
+                    method: `DELETE`
                 });
 
         } catch (ex) {

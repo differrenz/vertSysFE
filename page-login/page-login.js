@@ -42,7 +42,9 @@ export default class PageLogin extends Page {
 
     async validateLogin() {
 
-        if (globalAccountId !== 0 && globalAccountId !== null){
+        if (localStorage.getItem("globalID")
+            !== 0 && localStorage.getItem("globalID")
+            !== null) {
             confirm("Sie sind bereits eingeloggt. Loggen sie sich vorher aus, bevor sie sich bei einem neuen Account einloggen.")
             return;
         }
@@ -129,11 +131,11 @@ export default class PageLogin extends Page {
     }
 
     async setGlobalId() {
-        globalAccountId = await this._response
+        localStorage.setItem("globalID", await this._response);
     }
 
     logout() {
-        globalAccountId = null
+        localStorage.setItem("globalID", null);
         confirm("Sie sind nun ausgeloggt.");
     }
 };

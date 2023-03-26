@@ -6,13 +6,11 @@ export default class PageNew extends Page {
     constructor(app) {
         super(app, "page-new/page-new.html");
 
+        this._formData = new FormData();
 
-        this._lastName = null;
-        this._firstName = null;
-        this._email = null;
 
         this._newProfile = {
-            accountId: globalAccountId,
+            accountId: localStorage.getItem("globalID"),
             email: null,
             firstName: null,
             id: 0,
@@ -24,7 +22,18 @@ export default class PageNew extends Page {
         await super.init();
 
         let saveButton = this._mainElement.querySelector(".action.save");
-        saveButton.addEventListener("click", () => this._saveAndExit());
+        saveButton.addEventListener("click", () =>{
+            let tempImg = this._mainElement.querySelector(".image").files[0]
+
+            const formData = new FormData();
+            formData.append('image', tempImg || 'abc');
+            this._formData = formData
+
+            this._saveAndExit()
+        });
+
+
+
     }
 
     async _saveAndExit() {
@@ -42,14 +51,20 @@ export default class PageNew extends Page {
     }
 
     async uploadNewProfile() {
-
-        await fetch(
+        let response = await fetch(
             `http://localhost:8081/profile/`,
             {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this._newProfile)
             });
+
+
+        await fetch(`http://localhost:8081/profile/uploadImage/${await response.json()}`,
+            {
+                method: 'POST',
+                body: this._formData
+            })
     }
 }
 

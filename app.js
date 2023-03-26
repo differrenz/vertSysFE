@@ -62,7 +62,7 @@ class App {
      */
     async _gotoList() {
         try {
-            if (globalAccountId == null) {
+            if (localStorage.getItem("globalID") == null) {
                 confirm("Sie müssen sich erst einloggen, um die Personenübersicht zu sehen.")
                 location.hash = `#/login/`
             } else {
