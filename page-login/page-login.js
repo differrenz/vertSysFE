@@ -92,7 +92,7 @@ export default class PageLogin extends Page {
         this._newAccount.userName = this._userName
         this._newAccount.password = this._password
 
-        if (this._newAccount.userName == null || this._newAccount.password == null) {
+        if (this._newAccount.userName === "" || this._newAccount.password === "") {
             confirm("Mindestens ein Eingabefeld ist noch leer.");
             return;
         }

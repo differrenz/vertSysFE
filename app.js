@@ -112,7 +112,6 @@ class App {
      * @param profileId
      */
     async _gotoEdit(profileId) {
-
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
             let {default: PageUpdate} = await import("./page-update/page-update.js");
