@@ -47,7 +47,7 @@ export default class PageList extends Page {
                 console.log(image)
 
                 if (image) {
-                    document.getElementById("profileImage").src = image
+                    this._mainElement.getElementById("profileImage").src = image
                 }
             }
 
