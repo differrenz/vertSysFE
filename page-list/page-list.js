@@ -37,21 +37,33 @@ export default class PageList extends Page {
             html = html.replace("$forename$", dataset.firstName);
             html = html.replace("$email$", dataset.email);
 
-            // Element in die Liste einfügen
+
+            const response = await fetch(`http://localhost:8081/profile/showImage/${dataset.id}`)
+            if (response.status === 200) {
+                console.log(response)
+                const responseBody = await response.json()
+                const base64Data = responseBody.picByte;
+                const image = 'data: image/jpeg; base64,' + base64Data;
+                console.log(image)
+
+                if (image) {
+                    document.getElementById("profileImage").src = image
+                }
+            }
+
+
             let dummyElement = document.createElement("div");
             dummyElement.innerHTML = html;
             let liElement = dummyElement.firstElementChild;
             liElement.remove();
             olElement.appendChild(liElement);
 
-            // Event Handler registrieren
             liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit/${dataset.id}`);
             liElement.querySelector(".action.delete").addEventListener("click", () => {
                 this._askDelete(dataset.accountId)
             });
         }
     }
-
 
     async getAllProfiles() {
         let response = await fetch("http://localhost:8081/profile/getAllProfiles");
@@ -77,6 +89,7 @@ export default class PageList extends Page {
         }
         location.reload()
     }
-};
+}
+
 
 

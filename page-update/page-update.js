@@ -38,8 +38,17 @@ export default class PageUpdate extends Page {
         html = html.replace("$password$", account.password);
         this._mainElement.innerHTML = html;
 
+
         let saveButton = this._mainElement.querySelector(".action.save");
-        saveButton.addEventListener("click", () => this._saveAndExit());
+        saveButton.addEventListener("click", () =>{
+            let tempImg = this._mainElement.querySelector(".image").files[0]
+
+            const formData = new FormData();
+            formData.append('image', tempImg || 'abc');
+            this._formData = formData
+
+            this._saveAndExit()
+        });
     }
 
     async _saveAndExit() {
@@ -55,6 +64,7 @@ export default class PageUpdate extends Page {
 
         await this.updateProfile()
         await this.updateAccount()
+        await this.updateProfilePicture()
 
         location.hash = "#/";
     }
@@ -67,6 +77,14 @@ export default class PageUpdate extends Page {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this._newAccount)
             });
+    }
+
+    async updateProfilePicture(){
+        await fetch(`http://localhost:8081/profile/${this._profileId}/updateImage`,
+            {
+                method: 'PUT',
+                body: this._formData
+            })
     }
 
     async updateProfile() {
