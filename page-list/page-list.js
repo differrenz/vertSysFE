@@ -37,27 +37,25 @@ export default class PageList extends Page {
             html = html.replace("$forename$", dataset.firstName);
             html = html.replace("$email$", dataset.email);
 
-
-            const response = await fetch(`http://localhost:8081/profile/showImage/${dataset.id}`)
-            if (response.status === 200) {
-                console.log(response)
-                const responseBody = await response.json()
-                const base64Data = responseBody.picByte;
-                const image = 'data: image/jpeg; base64,' + base64Data;
-                console.log(image)
-
-                if (image) {
-                    this._mainElement.getElementById("profileImage").src = image
-                }
-            }
-
-
             let dummyElement = document.createElement("div");
             dummyElement.innerHTML = html;
             let liElement = dummyElement.firstElementChild;
             liElement.remove();
             olElement.appendChild(liElement);
 
+
+            const response = await fetch(`http://localhost:8081/profile/showImage/${dataset.id}`)
+            if (response.status === 200) {
+                console.log(response)
+                const responseBody = await response.json()
+                console.log(responseBody)
+                const base64Data = responseBody.picByte;
+                const image = 'data: image/ jpeg; base64,' + base64Data;
+                console.log(image)
+                if (image) {
+                    liElement.querySelector("#profileImage").src = image
+                }
+            }
             liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit/${dataset.id}`);
             liElement.querySelector(".action.delete").addEventListener("click", () => {
                 this._askDelete(dataset.accountId)
@@ -68,6 +66,12 @@ export default class PageList extends Page {
     async getAllProfiles() {
         let response = await fetch("http://localhost:8081/profile/getAllProfiles");
         return await response.json();
+    }
+
+
+    async fetchPicture(dataset) {
+        const response = fetch(`http://localhost:8081/profile/showImage/${dataset.id}`)
+        return await response
     }
 
 
